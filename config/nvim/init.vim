@@ -4,8 +4,8 @@ set all&
 " Apparently this needs to be as early as possible
 let mapleader=" "
 
-" Transparency!
-au ColorScheme * hi Normal ctermbg=none guibg=none
+" Use shell's background. This can be used to enable transparency
+"au ColorScheme * hi Normal ctermbg=none guibg=none
 
 call plug#begin('~/.config/nvim/plugged') " ------------------------ Plug begin
 
@@ -15,6 +15,7 @@ Plug 'xolox/vim-misc' " Support for other xolox plugins
 
 " Pane/split navigation, integrated with tmux!
 "   Unfortunately, it doesn't work right when nvim is called indirectly
+"   (On the tmux side, the suggested way to detect vim is with a regex)
 " Plug 'christoomey/vim-tmux-navigator'
 
 " Edit
@@ -85,12 +86,12 @@ let g:gruvbox_underline=0
 let g:gruvbox_contrast_dark="hard"
 colorscheme gruvbox
 
-" Black cursorline
-"highlight CursorLine ctermbg=Black
-"highlight CursorLineNR ctermbg=Black
+" " Black cursorline
+" highlight CursorLine ctermbg=Black
+" highlight CursorLineNR ctermbg=Black
 
 set colorcolumn=80
-"highlight ColorColumn ctermbg=Black
+" highlight ColorColumn ctermbg=Black
 
 " Use powerline characters in Airline
 let g:airline_powerline_fonts=1
