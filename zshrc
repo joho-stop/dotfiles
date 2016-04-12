@@ -19,10 +19,14 @@ ZSHRC_PRIVATE="$HOME/dotfiles_private/zshrc_private"
 # Tools
 
 export EDITOR="nvim"
-alias vim='nvim'
-
 export DIFF="meld"
 export BROWSER="firefox"
+
+# =============================================================================
+# Aliases
+
+alias vim='nvim'
+alias xclipc='xclip -selection c'
 
 # =============================================================================
 # Settings
