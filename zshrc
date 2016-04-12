@@ -23,10 +23,29 @@ export DIFF="meld"
 export BROWSER="firefox"
 
 # =============================================================================
-# Aliases
+# Shadows
 
 alias vim='nvim'
+
+# =============================================================================
+# Aliases
+
 alias xclipc='xclip -selection c'
+
+findheader () {
+	find -regextype posix-egrep -regex ".+\.(h|hh|hpp|hxx)" "$@"
+}
+grepheader () { grep "$@" `findheader` }
+
+findsrc () {
+	find -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx)" "$@"
+}
+grepsrc () { grep "$@" `findsrc` }
+
+findxx () {
+	find -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx|h|hh|hpp|hxx|ipp|ixx)" "$@"
+}
+grepxx () { grep "$@" `findxx` }
 
 # =============================================================================
 # Settings
