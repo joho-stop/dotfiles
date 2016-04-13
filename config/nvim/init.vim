@@ -1,4 +1,4 @@
-" GO AWAY
+" Reset all options
 set all&
 
 " Apparently this needs to be as early as possible
@@ -12,11 +12,6 @@ call plug#begin('~/.config/nvim/plugged') " ------------------------ Plug begin
 " General
 Plug 'tpope/vim-sensible'
 Plug 'xolox/vim-misc' " Support for other xolox plugins
-
-" Pane/split navigation, integrated with tmux!
-"   Unfortunately, it doesn't work right when nvim is called indirectly
-"   (On the tmux side, the suggested way to detect vim is with a regex)
-" Plug 'christoomey/vim-tmux-navigator'
 
 " Edit
 Plug 'tpope/vim-repeat'
@@ -32,7 +27,11 @@ Plug 'justinmk/vim-syntax-extra' " Better C syntax highlighting
 
 " Status
 Plug 'vim-airline/vim-airline'
-Plug 'airblade/vim-gitgutter'
+
+" Git
+Plug 'airblade/vim-gitgutter' " Status
+Plug 'tpope/vim-fugitive' " Commands
+" Plug 'chemzqm/vim-easygit'
 
 " Color & display
 Plug 'morhetz/gruvbox'
@@ -40,67 +39,45 @@ Plug 'luochen1990/rainbow'
 Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'Yggdroot/indentline' " Hmm.. which one's better?
 
-" File system stuff
+" Unix/file system stuff
 Plug 'tpope/vim-eunuch'
 
 " File navigation
 " Plug 'scrooloose/nerdtree'
 
-" Tag navigation
-Plug 'majutsushi/tagbar'
-
 " Session management
 Plug 'xolox/vim-session'
 
-" Tag management
-" Plug 'xolox/vim-easytags'
+" Tags
+Plug 'majutsushi/tagbar' " navigation
+" Plug 'xolox/vim-easytags' " management
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 
 " Not actually plugins, but vim-related
 Plug 'powerline/fonts' " Fonts
-" Plug 'dan-t/rusty-tags' " Tags for rust
 
 " Line numbers
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
-" Plug 'scrooloose/syntastic'
+" Plug 'dan-t/rusty-tags' " Tags for rust
 " Plug 'scrooloose/nerdcommenter'
 " Plug 'ntpeters/vim-better-whitespace' " didn't work??
-" Plug ' ... vim-fugitive'
-" Plug 'chemzqm/vim-easygit'
 " Plug 'terryma/vim-multiple-cursors'
 
 call plug#end() " ---------------------------------------------------- Plug end
 
-" I'm sure this won't cause issues ;)
+" Apparently C-space needs to be mapped differently depending on mode??
+xnoremap <Nul> <Esc>
 inoremap <C-space> <Esc>
+"cnoremap <Nul> <Esc>
+"onoremap <Nul> <Esc>
 
-" gruvbox
-set background=dark
-let g:gruvbox_bold=0
-let g:gruvbox_italic=0
-let g:gruvbox_underline=0
-" let g:gruvbox_undercurl=0
-let g:gruvbox_contrast_dark="hard"
-colorscheme gruvbox
-
-" " Black cursorline
-" highlight CursorLine ctermbg=Black
-" highlight CursorLineNR ctermbg=Black
-
-set colorcolumn=80
-" highlight ColorColumn ctermbg=Black
-
-" Use powerline characters in Airline
-let g:airline_powerline_fonts=1
-
-" Rust source for YouCompleteMe
-let g:ycm_rust_src_path='~/devel/rust-ycm/rustc-nightly/src'
-
-" More natural splits
-set splitbelow splitright
+set splitbelow splitright " More natural splits
+set scrolloff=3 " Minimum visible lines above and below the cursor
+set showcmd " Show pending command
+set hlsearch incsearch " Search settings
 
 " Highlight current line in current window
 augroup CursorLine
@@ -109,30 +86,13 @@ augroup CursorLine
   au WinLeave * setlocal nocursorline
 augroup END
 
-" GitGutter settings
-let g:gitgutter_override_sign_column_highlight=0
-let g:gitgutter_sign_column_always=1
-highlight SignColumn ctermbg=none
-highlight SignColumn guibg=none
-highlight GitGutterAdd ctermbg=none
-highlight GitGutterChange ctermbg=none
-highlight GitGutterDelete ctermbg=none
-highlight GitGutterChangeDelete ctermbg=none
-
-" Turn off real-time update for gitgutter
-let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
+set colorcolumn=80 " Ruler
 
 " This is a gitgutter recommendation, but apparently good in general? Need to
 " look this up...
 set updatetime=250
 
-" Turn on rainbow parens
-let g:rainbow_active=1
-
 filetype plugin on
-
-set showcmd
 
 " Opening a new file hides the current one (instead of closing it)
 " set hidden
@@ -141,16 +101,6 @@ set showcmd
 set tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
 
 set backspace=eol,start,indent " I guess this is the same as the default...
-
-set hlsearch
-
-set incsearch
-
-" Minimum visible lines above and below the cursor
-set scrolloff=3
-
-let g:airline#extensions#tabline#enabled=1
-set showtabline=1
 
 " ------------------------------------------------------------------ whitespace
 
@@ -181,6 +131,43 @@ let g:session_autosave_periodic = 1
 let g:session_autoload = 'no'
 let g:session_autosave = 'yes'
 
+" --------------------------------------------------------- luochen1990/rainbow
+
+let g:rainbow_active=1
+
+" --------------------------------------------------------------------- airline
+
+let g:airline#extensions#tabline#enabled=1
+set showtabline=1
+
+" Use powerline characters in Airline
+let g:airline_powerline_fonts=1
+
+" --------------------------------------------------------------------- gruvbox
+
+set background=dark
+let g:gruvbox_bold=0
+let g:gruvbox_italic=0
+let g:gruvbox_underline=0
+" let g:gruvbox_undercurl=0
+let g:gruvbox_contrast_dark="hard"
+colorscheme gruvbox
+
+" ------------------------------------------------------------------- gitgutter
+
+let g:gitgutter_override_sign_column_highlight=0
+let g:gitgutter_sign_column_always=1
+highlight SignColumn ctermbg=none
+highlight SignColumn guibg=none
+highlight GitGutterAdd ctermbg=none
+highlight GitGutterChange ctermbg=none
+highlight GitGutterDelete ctermbg=none
+highlight GitGutterChangeDelete ctermbg=none
+
+" Turn off real-time update for gitgutter
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
 " ------------------------------------------------------------------ easymotion
 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -192,10 +179,17 @@ nmap s <Plug>(easymotion-overwin-f2)
 " Use this for custom mappings
 "let g:tmux_navigator_no_mappings = 1
 
+" --------------------------------------------------------------- YouCompleteMe
+
+let g:ycm_global_ycm_extra_conf = $HOME . "/dotfiles/global_ycm_extra_conf.py"
+
 " ------------------------------------------------------------------ Rust stuff
 
 " Possibly obsolete?
 au BufNewFile,BufRead *.rs set filetype=rust
+
+" Rust source for YouCompleteMe
+let g:ycm_rust_src_path='~/devel/rust-ycm/rustc-nightly/src'
 
 " -------------------------------------------------------------- Terminal stuff
 

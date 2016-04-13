@@ -63,5 +63,5 @@ bindkey '^P' history-search-backward
 bindkey '^N' history-search-forward
 
 # Scripts and bin
-export PATH="~/bin:~/scripts:$PATH"
+export PATH="$HOME/bin:$HOME/scripts:$PATH"
 
