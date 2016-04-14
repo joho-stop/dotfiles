@@ -52,6 +52,9 @@ Plug 'xolox/vim-session'
 Plug 'majutsushi/tagbar' " navigation
 " Plug 'xolox/vim-easytags' " management
 
+" Fuzzy search
+Plug 'ctrlpvim/ctrlp.vim'
+
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 
@@ -71,8 +74,8 @@ call plug#end() " ---------------------------------------------------- Plug end
 " Apparently C-space needs to be mapped differently depending on mode??
 xnoremap <Nul> <Esc>
 inoremap <C-space> <Esc>
-"cnoremap <Nul> <Esc>
-"onoremap <Nul> <Esc>
+" cnoremap <Nul> <Esc>
+" onoremap <Nul> <Esc>
 
 set splitbelow splitright " More natural splits
 set scrolloff=3 " Minimum visible lines above and below the cursor
@@ -167,6 +170,14 @@ highlight GitGutterChangeDelete ctermbg=none
 " Turn off real-time update for gitgutter
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
+
+" ---------------------------------------------------------------------- ctrl-p
+
+let g:ctrlp_extensions = ['tag']
+" 'buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes',
+" 'mixed', 'bookmarkdir'
+
+let g:ctrlp_root_markers = ['.p4config', '.p4ignore']
 
 " ------------------------------------------------------------------ easymotion
 
