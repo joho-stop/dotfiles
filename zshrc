@@ -23,9 +23,15 @@ export DIFF="meld"
 export BROWSER="firefox"
 
 # =============================================================================
+# Settings
+
+#export NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+# =============================================================================
 # Shadows
 
 alias vim='nvim'
+alias :e='nvim' # I mean, it happens... :)
 
 # =============================================================================
 # Aliases
@@ -33,19 +39,19 @@ alias vim='nvim'
 alias xclipc='xclip -selection c'
 
 findheader () {
-	find -regextype posix-egrep -regex ".+\.(h|hh|hpp|hxx)" "$@"
+	find -type f -regextype posix-egrep -regex ".+\.(h|hh|hpp|hxx)" "$@"
 }
-grepheader () { grep "$@" `findheader` }
+grepheader () { findheader -exec grep "$@" {} \+ }
 
 findsrc () {
-	find -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx)" "$@"
+	find -type f -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx)" "$@"
 }
-grepsrc () { grep "$@" `findsrc` }
+grepsrc () { findsrc -exec grep "$@" {} \+ }
 
 findxx () {
-	find -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx|h|hh|hpp|hxx|ipp|ixx)" "$@"
+	find -type f -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx|h|hh|hpp|hxx|ipp|ixx)" "$@"
 }
-grepxx () { grep "$@" `findxx` }
+grepxx () { findxx -exec grep "$@" {} \+ }
 
 # =============================================================================
 # Settings
@@ -54,7 +60,7 @@ grepxx () { grep "$@" `findxx` }
 bindkey -v
 
 # cd-less cd
-setopt AUTO_CD
+# setopt AUTO_CD
 
 # vi style incremental search
 bindkey '^R' history-incremental-search-backward

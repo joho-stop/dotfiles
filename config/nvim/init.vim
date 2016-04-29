@@ -2,10 +2,12 @@
 set all&
 
 " Apparently this needs to be as early as possible
-let mapleader=" "
+let mapleader = "\<space>"
 
 " Use shell's background. This can be used to enable transparency
 "au ColorScheme * hi Normal ctermbg=none guibg=none
+
+" let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 call plug#begin('~/.config/nvim/plugged') " ------------------------ Plug begin
 
@@ -36,7 +38,7 @@ Plug 'tpope/vim-fugitive' " Commands
 " Color & display
 Plug 'morhetz/gruvbox'
 Plug 'luochen1990/rainbow'
-Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'nathanaelkane/vim-indent-guides'
 " Plug 'Yggdroot/indentline' " Hmm.. which one's better?
 
 " Unix/file system stuff
@@ -50,24 +52,18 @@ Plug 'xolox/vim-session'
 
 " Tags
 Plug 'majutsushi/tagbar' " navigation
-" Plug 'xolox/vim-easytags' " management
 
 " Fuzzy search
-Plug 'ctrlpvim/ctrlp.vim'
+"Plug 'ctrlpvim/ctrlp.vim' " Unfortunately, too slow for tags
 
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 
-" Not actually plugins, but vim-related
-Plug 'powerline/fonts' " Fonts
-
 " Line numbers
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
-" Plug 'dan-t/rusty-tags' " Tags for rust
-" Plug 'scrooloose/nerdcommenter'
-" Plug 'ntpeters/vim-better-whitespace' " didn't work??
-" Plug 'terryma/vim-multiple-cursors'
+" Not actually plugins, but vim-related
+Plug 'powerline/fonts' " Fonts
 
 call plug#end() " ---------------------------------------------------- Plug end
 
@@ -103,12 +99,18 @@ filetype plugin on
 " Tabs are width 4
 set tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
 
+" Track visited tags
+set tagstack
+
 set backspace=eol,start,indent " I guess this is the same as the default...
+
+" ---------------------------------------------------------------------- tagbar
+
+nnoremap <F8> :TagbarToggle<CR>
 
 " ------------------------------------------------------------------ whitespace
 
 highlight ExtraWhitespace ctermbg=red guibg=red
-" JAM: This part isn't needed when using vim-better-whitespace
 autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
 
 " ---------------------------------------------------------------- line numbers
@@ -179,11 +181,14 @@ let g:ctrlp_extensions = ['tag']
 
 let g:ctrlp_root_markers = ['.p4config', '.p4ignore']
 
+" Don't show untracked files (-o)
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files --exclude-standard']
+" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
 " ------------------------------------------------------------------ easymotion
 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 let g:EasyMotion_smartcase = 1 " case insensitive-ish
-" map <Leader> <Plug>(easymotion-prefix)
 nmap s <Plug>(easymotion-overwin-f2)
 
 " ---------------------------------------------------------- vim-tmux-navigator
