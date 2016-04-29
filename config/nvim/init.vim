@@ -53,9 +53,6 @@ Plug 'xolox/vim-session'
 " Tags
 Plug 'majutsushi/tagbar' " navigation
 
-" Fuzzy search
-"Plug 'ctrlpvim/ctrlp.vim' " Unfortunately, too slow for tags
-
 " Autocomplete
 Plug 'Valloric/YouCompleteMe'
 
@@ -172,18 +169,6 @@ highlight GitGutterChangeDelete ctermbg=none
 " Turn off real-time update for gitgutter
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
-
-" ---------------------------------------------------------------------- ctrl-p
-
-let g:ctrlp_extensions = ['tag']
-" 'buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes',
-" 'mixed', 'bookmarkdir'
-
-let g:ctrlp_root_markers = ['.p4config', '.p4ignore']
-
-" Don't show untracked files (-o)
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files --exclude-standard']
-" let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " ------------------------------------------------------------------ easymotion
 
