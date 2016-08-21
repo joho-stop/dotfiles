@@ -53,6 +53,11 @@ findxx () {
 }
 grepxx () { findxx -exec grep "$@" {} \+ }
 
+findrs () {
+	find -type f -regextype posix-egrep -regex ".+\.(rs|rc|toml)" "$@"
+}
+greprs () { findrs -exec grep "$@" {} \+ }
+
 # =============================================================================
 # Settings
 
@@ -70,4 +75,15 @@ bindkey '^N' history-search-forward
 
 # Scripts and bin
 export PATH="$HOME/bin:$HOME/scripts:$PATH"
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# =============================================================================
+# Vulkan SDK...
+
+export VULKAN_SDK="$HOME/sdk/VulkanSDK/1.0.21.1/x86_64"
+
+export PATH="$PATH:$VULKAN_SDK/bin"
+export LD_LIBRARY_PATH="$VULKAN_SDK/lib"
+export VK_LAYER_PATH="$VULKAN_SDK/etc/explicit_layer.d"
 

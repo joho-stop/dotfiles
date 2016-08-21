@@ -183,6 +183,7 @@ nmap s <Plug>(easymotion-overwin-f2)
 " --------------------------------------------------------------- YouCompleteMe
 
 let g:ycm_global_ycm_extra_conf = $HOME . "/dotfiles/global_ycm_extra_conf.py"
+let g:ycm_server_python_interpreter = "/usr/bin/python3"
 
 " ------------------------------------------------------------------ Rust stuff
 
