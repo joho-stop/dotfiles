@@ -7,6 +7,8 @@ let mapleader = "\<space>"
 " Use shell's background. This can be used to enable transparency
 "au ColorScheme * hi Normal ctermbg=none guibg=none
 
+" Couldn't get this to work, I think tmux or neovim still needs an update?
+" Look into it again sometime...
 " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 call plug#begin('~/.config/nvim/plugged') " ------------------------ Plug begin
@@ -14,6 +16,7 @@ call plug#begin('~/.config/nvim/plugged') " ------------------------ Plug begin
 " General
 Plug 'tpope/vim-sensible'
 Plug 'xolox/vim-misc' " Support for other xolox plugins
+Plug 'kana/vim-operator-user' " Required by vim-clang-format
 
 " Edit
 Plug 'tpope/vim-repeat'
@@ -38,14 +41,9 @@ Plug 'tpope/vim-fugitive' " Commands
 " Color & display
 Plug 'morhetz/gruvbox'
 Plug 'luochen1990/rainbow'
-" Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'Yggdroot/indentline' " Hmm.. which one's better?
 
 " Unix/file system stuff
 Plug 'tpope/vim-eunuch'
-
-" File navigation
-" Plug 'scrooloose/nerdtree'
 
 " Session management
 Plug 'xolox/vim-session'
@@ -58,6 +56,9 @@ Plug 'Valloric/YouCompleteMe'
 
 " Line numbers
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
+
+" Formatting
+Plug 'rhysd/vim-clang-format'
 
 " Not actually plugins, but vim-related
 Plug 'powerline/fonts' " Fonts
@@ -75,15 +76,6 @@ set scrolloff=3 " Minimum visible lines above and below the cursor
 set showcmd " Show pending command
 set hlsearch incsearch " Search settings
 
-" Highlight current line in current window
-augroup CursorLine
-  au!
-  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  au WinLeave * setlocal nocursorline
-augroup END
-
-set colorcolumn=80 " Ruler
-
 " This is a gitgutter recommendation, but apparently good in general? Need to
 " look this up...
 set updatetime=250
@@ -93,13 +85,47 @@ filetype plugin on
 " Opening a new file hides the current one (instead of closing it)
 " set hidden
 
-" Tabs are width 4
-set tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
-
 " Track visited tags
 set tagstack
 
 set backspace=eol,start,indent " I guess this is the same as the default...
+
+" ---------------------------------------------------------------------- rulers
+
+" Highlight current line in current window
+augroup CursorLine
+  au!
+  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
+augroup END
+
+set colorcolumn=80 " Ruler
+
+" --------------------------------------------------------------- formatoptions
+
+set textwidth=79
+
+" j Remove comment leader when joining lines
+" q Allow formatting of comments with 'gq'.
+" l Long lines are not broken in insert mode
+" 1 Don't break a line after a one-letter word
+" 2 When formatting text, use the indent of the SECOND line of a paragraph
+set formatoptions-=tcroqwan2vblmMB1j
+set formatoptions=jql12
+
+" ------------------------------------------------------------------------ tabs
+
+" Tabs display as 4 spaces
+set tabstop=4
+
+" Tabs are expanded to spaces
+set expandtab
+
+" Each tab inserts 4 spaces
+set shiftwidth=4
+
+" Backspace deletes to multiples of 4 spaces
+set softtabstop=4 
 
 " ---------------------------------------------------------------------- tagbar
 
@@ -166,7 +192,7 @@ highlight GitGutterChange ctermbg=none
 highlight GitGutterDelete ctermbg=none
 highlight GitGutterChangeDelete ctermbg=none
 
-" Turn off real-time update for gitgutter
+" Turn off real-time update for gitgutter (slow)
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
@@ -185,15 +211,51 @@ nmap s <Plug>(easymotion-overwin-f2)
 let g:ycm_global_ycm_extra_conf = $HOME . "/dotfiles/global_ycm_extra_conf.py"
 let g:ycm_server_python_interpreter = "/usr/bin/python3"
 
-" ------------------------------------------------------------------ Rust stuff
+" d = declaration/definition
+nnoremap <leader>zd :YcmCompleter GoTo<CR>
 
-" Possibly obsolete?
-au BufNewFile,BufRead *.rs set filetype=rust
+" e = error
+nnoremap <leader>ze :YcmShowDetailedDiagnostic<CR>
 
+" F5 = refresh
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+
+" ------------------------------------------------------------------------ rust
+
+" TODO: make this smarter (don't set it if not available?)
 " Rust source for YouCompleteMe
 let g:ycm_rust_src_path='~/devel/rust-ycm/rustc-nightly/src'
 
-" -------------------------------------------------------------- Terminal stuff
+" ---------------------------------------------------------------------- cscope
+
+if has("cscope")
+    set csprg=/usr/bin/cscope
+    set csto=1
+    set cst
+    set nocsverb
+    " add any database in current directory
+endif
+
+""list of reference
+"nnoremap <unique> <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+""definition
+"nnoremap <unique> <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+""call
+"nnoremap <unique> <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+"nnoremap <unique> <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+"nnoremap <unique> <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+"nnoremap <unique> <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"nnoremap <unique> <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"nnoremap <unique> <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+" ------------------------------------------------------------ vim-clang-format
+
+let g:clang_format#detect_style_file=1
+
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+
+" ------------------------------------------------------------- pane navigation
 
 if exists(':tnoremap')
     " Navigation between panes with Alt+hjkl
@@ -201,13 +263,15 @@ if exists(':tnoremap')
     tnoremap <A-j> <C-\><C-n><C-w>j
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
-    nnoremap <A-h> <C-w>h
-    nnoremap <A-j> <C-w>j
-    nnoremap <A-k> <C-w>k
-    nnoremap <A-l> <C-w>l
 endif
 
-" ------------------------------------------------------- Private configuration
+" I had this behind the 'exists' check above, but that doesn't seem right...
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+" ------------------------------------------------------- private configuration
 
 " Include private configuration if it exists
 function! SourceIfExists(p)
@@ -217,5 +281,3 @@ function! SourceIfExists(p)
 endfunction
 
 call SourceIfExists($HOME . "/dotfiles_private/init.vim")
-
-
