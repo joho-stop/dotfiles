@@ -38,25 +38,34 @@ alias :e='nvim' # I mean, it happens... :)
 
 alias xclipc='xclip -selection c'
 
+# find
+
 findheader () {
 	find -type f -regextype posix-egrep -regex ".+\.(h|hh|hpp|hxx)" "$@"
 }
-grepheader () { findheader -exec grep "$@" {} \+ }
-
 findsrc () {
 	find -type f -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx)" "$@"
 }
-grepsrc () { findsrc -exec grep "$@" {} \+ }
-
 findxx () {
 	find -type f -regextype posix-egrep -regex ".+\.(c|cc|cpp|cxx|h|hh|hpp|hxx|ipp|ixx)" "$@"
 }
-grepxx () { findxx -exec grep "$@" {} \+ }
-
 findrs () {
-	find -type f -regextype posix-egrep -regex ".+\.(rs|rc|toml)" "$@"
+	find -type f -regextype posix-egrep -regex ".+\.(rs|toml)" "$@"
 }
+
+# grep
+
+grepheader () { findheader -exec grep "$@" {} \+ }
+grepsrc () { findsrc -exec grep "$@" {} \+ }
+grepxx () { findxx -exec grep "$@" {} \+ }
 greprs () { findrs -exec grep "$@" {} \+ }
+
+# rg
+
+rgheader () { rg -g "*.h" -g "*.hh" -g "*.hpp" -g "*.hxx" "$@" }
+rgsrc () { rg -g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" "$@" }
+rgxx () { rg -g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.hxx" -g "*.ipp" -g "*.ixx" "$@" }
+rgrs () { rg -g "*.rs" -g "*.toml" "$@" }
 
 # =============================================================================
 # Settings
