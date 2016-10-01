@@ -224,7 +224,7 @@ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 " TODO: make this smarter (don't set it if not available?)
 " Rust source for YouCompleteMe
-let g:ycm_rust_src_path='~/devel/rust-ycm/rustc-nightly/src'
+"let g:ycm_rust_src_path='~/devel/rust-ycm/rustc-nightly/src'
 
 " ---------------------------------------------------------------------- cscope
 

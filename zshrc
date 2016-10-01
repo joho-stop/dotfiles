@@ -67,6 +67,17 @@ rgsrc () { rg -g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" "$@" }
 rgxx () { rg -g "*.c" -g "*.cc" -g "*.cpp" -g "*.cxx" -g "*.h" -g "*.hh" -g "*.hpp" -g "*.hxx" -g "*.ipp" -g "*.ixx" "$@" }
 rgrs () { rg -g "*.rs" -g "*.toml" "$@" }
 
+# git log formats
+
+jog () {
+    git log --format="%h %ae %s" "$@"
+}
+
+# =============================================================================
+# Rust
+
+export RUST_SRC_PATH="$HOME/devel/rust"
+
 # =============================================================================
 # Settings
 
@@ -95,4 +106,9 @@ export VULKAN_SDK="$HOME/sdk/VulkanSDK/1.0.21.1/x86_64"
 export PATH="$PATH:$VULKAN_SDK/bin"
 export LD_LIBRARY_PATH="$VULKAN_SDK/lib"
 export VK_LAYER_PATH="$VULKAN_SDK/etc/explicit_layer.d"
+
+# =============================================================================
+# Too convenient...
+
+export DISPLAY=:0
 
